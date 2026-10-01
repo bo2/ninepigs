@@ -3,6 +3,11 @@
 The skill and the `/api/v1` and MCP surface it runs on, by skill version. The API itself changes in place
 with no compatibility window; a version here names the app build the skill was tested against.
 
+## 0.1.1 — 2026-10-01
+
+- A real `open_period` answers only the new period; the routine reports the figures from the last
+  `check_period`. A refused statement file fails the `stage_statement` call naming the file.
+
 ## 0.1.0 — 2026-10-01
 
 First release.

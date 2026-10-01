@@ -100,8 +100,9 @@ has not accepted.
 
 `open_period` with the next period's dates (the household's period length is in the notes; the
 new period starts the day the current one ends), the balances from step 5, `end_schedule_ids`
-for schedules the member said to end, and a `request_id`. Dry-run it once more when anything
-changed since step 5.
+for schedules the member said to end, and a `request_id`. Run `check_period` once more when
+anything changed since step 5: the real write answers only the new period, so the figures you
+report come from that last check.
 
 Report: the closed period's net, the distributions into funds, and the new period's dates.
 
