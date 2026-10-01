@@ -1,0 +1,23 @@
+{
+  "name": "ninepigs",
+  "displayName": "Ninepigs",
+  "version": "0.1.0",
+  "description": "Run a household's money in Ninepigs: import bank statements, record what the app could not settle, check and close periods, answer money questions, keep schedules, budgets and funds current.",
+  "author": {
+    "name": "Ninepigs",
+    "url": "https://ninepigs.com"
+  },
+  "homepage": "https://ninepigs.com/docs/connect",
+  "repository": "https://github.com/bo2dev/ninepigs",
+  "license": "MIT",
+  "keywords": ["household", "budget", "finance", "mcp"],
+  "userConfig": {
+    "api_token": {
+      "type": "string",
+      "title": "Ninepigs API token",
+      "description": "Create one at ninepigs.com under Settings → Security → API tokens. Use the `record` scope to import and record, `write` to also keep notes, schedules, funds and periods.",
+      "sensitive": true,
+      "required": true
+    }
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "ninepigs": {
+      "type": "http",
+      "url": "https://api.ninepigs.com/mcp",
+      "headers": {
+        "Authorization": "Bearer ${user_config.api_token}"
+      }
+    }
+  }
+}
