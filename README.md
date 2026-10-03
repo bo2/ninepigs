@@ -41,9 +41,9 @@ Hosted agents (Claude.ai, ChatGPT) connect through OAuth instead and ask for the
 
 | Agent | Skill | Connection |
 |---|---|---|
-| **Claude Code** | `claude plugin marketplace add bo2dev/ninepigs` then `claude plugin install ninepigs@ninepigs` | the plugin asks for your token and connects the MCP server itself |
-| **Codex** | `$skill-installer bo2dev/ninepigs/skills/ninepigs` | `codex mcp add ninepigs --url https://api.ninepigs.com/mcp --bearer-token-env-var NINEPIGS_API_TOKEN`, with the token exported in your shell |
-| **Claude.ai, Claude desktop** | download `ninepigs-skill.zip` from the latest [release](https://github.com/bo2dev/ninepigs/releases) and add it under Settings → Capabilities → Skills | add a custom connector at `https://api.ninepigs.com/mcp` |
+| **Claude Code** | `claude plugin marketplace add bo2/ninepigs` then `claude plugin install ninepigs@ninepigs` | the plugin asks for your token and connects the MCP server itself |
+| **Codex** | `$skill-installer bo2/ninepigs/skills/ninepigs` | `codex mcp add ninepigs --url https://api.ninepigs.com/mcp --bearer-token-env-var NINEPIGS_API_TOKEN`, with the token exported in your shell |
+| **Claude.ai, Claude desktop** | download `ninepigs-skill.zip` from the latest [release](https://github.com/bo2/ninepigs/releases) and add it under Settings → Capabilities → Skills | add a custom connector at `https://api.ninepigs.com/mcp` |
 | **ChatGPT** | import the `skills/ninepigs` folder from this repository (Create → Upload) | add `https://api.ninepigs.com/mcp` as a custom MCP connector in developer mode |
 
 Check it works: start a new session and ask "What's my household's currency?". The agent answers

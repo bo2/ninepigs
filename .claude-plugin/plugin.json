@@ -8,7 +8,7 @@
     "url": "https://ninepigs.com"
   },
   "homepage": "https://ninepigs.com/docs/connect",
-  "repository": "https://github.com/bo2dev/ninepigs",
+  "repository": "https://github.com/bo2/ninepigs",
   "license": "MIT",
   "keywords": ["household", "budget", "finance", "mcp"],
   "userConfig": {
