@@ -1,0 +1,12 @@
+interface:
+  display_name: "Ninepigs"
+  short_description: "Run a household's money in Ninepigs"
+  default_prompt: "Use $ninepigs to import this period's bank statements and check what is unrecorded."
+
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "ninepigs"
+      description: "Ninepigs MCP server: the household's books"
+      transport: "streamable_http"
+      url: "https://api.ninepigs.com/mcp"
