@@ -9,6 +9,10 @@ direct-API equivalent of every tool is in [api.md](api.md).
 household's conventions. `list_accounts` → each member's accounts (`is_credit`, `is_cash`) and
 the notes' mapping of each to its bank accounts.
 
+A period's last day is also the next one's first, so a row dated that day belongs to whichever
+period was open when it was recorded. Find a period's rows by its id (`find_transactions` with
+the period), never by date.
+
 Stop here if the token is `read`: the routine writes.
 
 ## 1. Get the exports
@@ -59,6 +63,11 @@ A `dedup_possible` row (a near match in the ledger outside the three-day window)
 only if the dates differ by more than a few days; otherwise confirm it as `status: duplicate`.
 A pair the app proposed but the notes contradict: `not_a_transfer` on the row splits it.
 
+Dedup compares one bank row with one ledger entry. A member's single hand entry for a purchase the
+bank split into two charges (same merchant, same day, amounts summing to the entry) is not caught:
+both rows come to review. Record the bank rows with the hand entry's comment and destination, then
+`delete_transaction` the hand entry — with the member's yes, since it is their entry.
+
 Send the questions. Apply the answers with `map_import_rows`; an answer you cannot map ("that was
 for Mom") is a comment on the row, with the member's chosen destination.
 
@@ -66,7 +75,10 @@ for Mom") is a comment on the row, with the member's chosen destination.
 
 `approve_import` with the batch and the row ids (or the mappings riding along) and `dry_run`
 first. Read `effects` per transaction: the period it lands in, the bill it settles and what
-remains of it, an `overspent_amount` on a budget. An effect the member did not expect
+remains of it, an `overspent_amount` on a budget. Mapping a row can attach a bill to it; check
+every row's `occurrence_id` against what the row is (a restaurant charge does not pay a streaming
+bill) and clear a wrong one with `occurrence_id: null` before approving. An effect the member did
+not expect
 (a bill settled twice, a different period) is a question before the real write.
 
 Then the same call with a `request_id`. Rows that now match the ledger (the member entered them
@@ -79,8 +91,15 @@ check. A batch you cannot finish stays open in the app's review screen for the m
 
 `check_period` with the period's dates and every account's closing balance as the bank shows it
 on the period's last day (a credit account's balance is what is owed; cash accounts as the notes
-say, usually 0). Balances come from the member or from the statement's closing balance where the
-export carries one.
+say, usually 0). Balances come from the member or from the bank's account page.
+
+- **Pending card charges.** When pending rows were recorded (`include_pending`), the card balance
+  you enter is the bank's current balance **plus its pending total**: the bank leaves pending out,
+  the ledger already has it. Otherwise the check is off by exactly the pending total, and a later
+  error can hide it.
+- **Running balances in an export** are not a closing balance: rows sharing a date can be printed
+  in any order, so the last row's balance may be from before another row that day. Take the
+  closing balance from the account page.
 
 The answer is `unaccounted` per member: what their accounts moved that the books do not show.
 Near zero for everyone → the period is ready. Otherwise, in this order:
@@ -88,9 +107,11 @@ Near zero for everyone → the period is ready. Otherwise, in this order:
 1. The notes' balance convention — a Ninepigs account that stands for two bank accounts needs
    both balances folded in (the commonest cause).
 2. A pending card row the bank has since posted, or a row posted after the export was taken:
-   `find_transactions` for the amount.
-3. A hand entry with a typo (amount, direction, member): `find_transactions` with the period and
-   the member; `update_transaction` fixes it.
+   `find_transactions` for the amount. A gap equal to the card's pending total is a balance
+   entered without pending (see Pending card charges above).
+3. A hand entry with a typo (amount, direction, member), or a hand entry duplicating a bank row
+   recorded by the import: `find_transactions` with the period and the member;
+   `update_transaction` fixes it, `delete_transaction` removes a duplicate.
 4. A cash expense nobody recorded: the member's call.
 
 Report the figure per member and what explains it; do not open the period on a figure the member
