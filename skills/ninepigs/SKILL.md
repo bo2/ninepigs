@@ -5,7 +5,7 @@ license: MIT
 compatibility: Needs the Ninepigs MCP server connected (https://api.ninepigs.com/mcp), or Python 3 with network access for scripts/ninepigs.py.
 metadata:
   author: ninepigs
-  version: "0.1.2"
+  version: "0.1.3"
 ---
 
 # Ninepigs
@@ -93,6 +93,8 @@ screen.
 - Preview first: `approve_import`, `record_transaction`, `settle_bill` and `open_period` take a
   dry run that reports the effects without writing. Use it whenever the effect is not obvious.
 - Give each intended write its own `request_id` and reuse it only to retry that write.
+- Before recording a member's spending by hand, `find_transactions` for the amount and date: an
+  import may have recorded it already, and the import's dedup does not run again afterwards.
 - Token scope: `read` answers questions; `record` runs the import and records money but cannot
   change a row or the notes; `write` does everything. A refused call names the scope it needs —
   say so rather than working around it.
@@ -104,6 +106,15 @@ is the answer); `summarize_spending` by category, member or month for totals;
 `find_transactions` for "what was that charge"; `get_fund_status` for goals and their projected
 dates; `list_bills` for what is due. Answer in the household's currency with the period named. A
 transfer between members adds nothing to totals.
+
+"Who owes whom" in a household whose members keep personal funds, while their income lands in
+their own accounts: each member's net across their accounts (debit minus what the credit card
+owes, pending included) should equal the balances of the funds that are theirs; one member —
+usually whoever receives most of the income — also holds the shared funds and what is not yet
+distributed. The difference is the transfer. A member's spending from their own fund moves both
+sides equally and never changes it; a period close's distribution into a member's fund, and shared
+costs a member paid from their own accounts, do. Which funds are whose, and who holds the shared
+money, are the household's: read them from the notes, or ask and write them there.
 
 ## Keeping plans current
 

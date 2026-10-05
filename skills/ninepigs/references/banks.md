@@ -8,7 +8,7 @@ The import reads the banks' own CSV downloads, unchanged. One file is one accoun
 |---|---|---|
 | BMO chequing | `First Bank Card, Transaction Type, Date Posted, Transaction Amount, Description` | negative amount = spend |
 | BMO credit card | `Item #, Card #, Transaction Date, Posting Date, Transaction Amount, Description` | positive amount = spend; `Card #` tells cards on one statement apart |
-| Scotiabank chequing | `Filter, Date, Description, Sub-description, Type of Transaction, Amount, Balance` | the running `Balance` is the closing balance for the period check |
+| Scotiabank chequing | `Filter, Date, Description, Sub-description, Type of Transaction, Amount, Balance` | the running `Balance` can be out of order within a day; take the closing balance from the account page |
 | Scotiabank credit card | `Filter, Date, Description, Sub-description, Status, Type of Transaction, Amount` | `Status` marks rows the bank has not posted yet; they are skipped unless `include_pending` |
 
 A known header matches as a prefix, so a bank adding a trailing column does not break the file.
