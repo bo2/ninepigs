@@ -1,7 +1,7 @@
 {
   "name": "ninepigs",
   "displayName": "Ninepigs",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Run a household's money in Ninepigs: import bank statements, record what the app could not settle, check and close periods, answer money questions, keep schedules, budgets and funds current.",
   "author": {
     "name": "Ninepigs",

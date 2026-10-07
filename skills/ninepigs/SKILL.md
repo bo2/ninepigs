@@ -5,7 +5,7 @@ license: MIT
 compatibility: Needs the Ninepigs MCP server connected (https://api.ninepigs.com/mcp), or Python 3 with network access for scripts/ninepigs.py.
 metadata:
   author: ninepigs
-  version: "0.1.3"
+  version: "0.1.4"
 ---
 
 # Ninepigs
@@ -73,7 +73,7 @@ from the household's categories and funds, always with an "other":
 
 ```
 Alice — 3 rows from the card I could not settle:
-1. 09-18  DOLLAR STORE #412   23.40 — (a) Home, like 5 earlier  (b) fund Kids, like 3  (c) other
+1. 09-18  DOLLAR STORE #412   23.40 — (a) Home · Groceries, like 5 earlier  (b) Home · unplanned, like 2  (c) fund Kids, like 3  (d) other
 2. 09-21  e-transfer to J. SMITH   300.00 — no precedent: (a) loan out  (b) gift  (c) other
 3. 09-27  AMZN Mktp CA*2K7   61.12 — (a) Home  (b) Entertainment  (c) other
 Answer like "1a 2a 3 Clothing".
