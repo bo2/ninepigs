@@ -30,7 +30,7 @@ key and body within 24 hours replays the first answer instead of writing again.
 | `stage_statement` | `--form POST /import-batches` with `user_id`, `include_pending`, `source=agent`, `files[]=@…` |
 | `review_import` | `GET /import-batches/{id}/items?needs=review` — each row with `precedents` and `precedent_summary` |
 | `map_import_rows` | `PATCH /import-batches/{id}/items` `{"items": [{"id", "kind"?, "category_id"?, "fund_id"?, "to_user_id"?, "schedule_id"?, "occurrence_id"?, "unplanned"?, "comment"?, "status"?}]}` — a spend names its budget (`schedule_id`), its bill (`occurrence_id`, which brings its schedule) or `unplanned: true` (`write` scope) — or let the mappings ride along on the approve, which `record` allows |
-| `approve_import` | `POST /import-batches/{id}/approve` `{"items": [...]}` or `{"item_ids": [...]}`, plus `schedule_create` / `schedule_patch`, `force`; `--dry-run` first, then `--key` |
+| `approve_import` | `POST /import-batches/{id}/approve` `{"items": [...]}` or `{"item_ids": [...]}`, plus `schedule_create` / `schedule_patch` with `schedule_item_id` naming its row when several are approved, `force`; `--dry-run` first, then `--key` |
 | `complete_import`, `discard_import` | `POST /import-batches/{id}/complete`, `DELETE /import-batches/{id}` |
 | `list_imports` | `GET /import-batches`, `?status=reviewed` for finished ones |
 | `not_a_transfer` | `POST /import-batches/{id}/items/{item}/not-a-transfer` |

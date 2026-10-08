@@ -3,6 +3,13 @@
 The skill and the `/api/v1` and MCP surface it runs on, by skill version. The API itself changes in place
 with no compatibility window; a version here names the app build the skill was tested against.
 
+## 0.1.5 — 2026-10-08
+
+- A row set aside in an earlier batch stages set aside again, with its comment
+  (`guess_source: set_aside`), instead of returning to review.
+- `approve_import` takes `schedule_item_id`, the row `schedule_create` or `schedule_patch` belongs
+  to, so a new schedule can start from one row of an approve that records several.
+
 ## 0.1.4 — 2026-10-08
 
 - Import review: a spend row is recorded only once it names its budget (`schedule_id`), its bill
