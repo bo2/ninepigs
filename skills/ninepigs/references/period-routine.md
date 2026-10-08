@@ -42,8 +42,13 @@ Read the answer:
 
 `review_import` with the batch → every row a person must decide: date, amount, direction, bank
 text, and `precedents` (the household's past transactions for the same merchant, this member
-first, newest first, up to ten, each with its destination and comment) with a
-`precedent_summary` such as `Home 5, fund Kids 3`.
+first, newest first, up to ten, each with its destination, the `schedule` it drew on — `mode`
+`spread` is a budget, `fixed` a bill — or `unplanned`, and its comment) with a `precedent_summary`
+by category and schedule, such as `Home · Groceries 5, Home · unplanned 2, fund Kids 3`.
+
+A destination for a `spend` row is a category **and** its plan: the budget it draws on
+(`schedule_id`), the bill it pays (`occurrence_id`), or `unplanned: true`. `approve_import` skips a
+spend row that names none of the three. Precedents agree only when they agree on both.
 
 Decide each row in this order; the first rule that applies wins:
 
@@ -51,10 +56,10 @@ Decide each row in this order; the first rule that applies wins:
 |---|---|
 | a move the notes say is not a transaction here — from an untracked account, a card payment from chequing, the deposit side of a member-to-member transfer, a row the member enters by hand | `map_import_rows` with `status: ignored` and a comment naming the reason |
 | a payment of a bill the app did not match (amount differs from the plan, or paid late) — check `list_bills` with `status: unpaid` | map it with the bill's `occurrence_id`; the plan adjusts |
-| a row whose precedents agree (two or more, one destination, this member) | map it to that destination; list it under "recorded from precedent" in your summary so the member can glance |
+| a row whose precedents agree (two or more, one destination and plan, this member) | map it to that destination and plan; list it under "recorded from precedent" in your summary so the member can glance |
 | a counterparty or merchant the notes settle (e.g. "e-transfers to J. Smith are rent") | map it as the notes say |
 | a recurring charge with no schedule (a subscription, a new bill) | map it, and record it with `schedule_create` on the approve (`mode: fixed`, `frequency`, `interval`, `amount`) so the next period expects it |
-| anything else — precedents split, none, an unknown counterparty, an amount that matches nothing | a question for the member (SKILL.md § Asking the household) |
+| anything else — precedents split (between categories, or between budgets or unplanned in one category), none, an unknown counterparty, an amount that matches nothing | a question for the member (SKILL.md § Asking the household), the choices naming the budget or unplanned |
 
 Never choose from merchant text alone: the same store is Home one day and a child's fund the
 next, and the app's `guess_source` stays `none` for a reason.
@@ -77,9 +82,10 @@ for Mom") is a comment on the row, with the member's chosen destination.
 first. Read `effects` per transaction: the period it lands in, the bill it settles and what
 remains of it, an `overspent_amount` on a budget. Mapping a row can attach a bill to it; check
 every row's `occurrence_id` against what the row is (a restaurant charge does not pay a streaming
-bill) and clear a wrong one with `occurrence_id: null` before approving. An effect the member did
-not expect
-(a bill settled twice, a different period) is a question before the real write.
+bill) and clear a wrong one with `occurrence_id: null` — its schedule goes with it — before
+approving. A `skipped` spend row named no plan: map its budget or `unplanned: true`. An effect the
+member did not expect (a bill settled twice, a different period) is a question before the real
+write.
 
 Then the same call with a `request_id`. Rows that now match the ledger (the member entered them
 meanwhile) are skipped, not duplicated.

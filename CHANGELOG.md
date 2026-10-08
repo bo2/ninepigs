@@ -3,6 +3,15 @@
 The skill and the `/api/v1` and MCP surface it runs on, by skill version. The API itself changes in place
 with no compatibility window; a version here names the app build the skill was tested against.
 
+## 0.1.4 — 2026-10-08
+
+- Import review: a spend row is recorded only once it names its budget (`schedule_id`), its bill
+  (`occurrence_id`) or `unplanned: true`; precedents and their summary show the schedule each one
+  drew on, and the member's choices name the budget or unplanned.
+- `map_import_rows` and `approve_import` take `unplanned`; clearing a wrong bill's
+  `occurrence_id` clears its schedule too. `record_transaction` and `update_transaction` take
+  `schedule_id` for a budget.
+
 ## 0.1.3 — 2026-10-05
 
 - The period routine: a row on the boundary day belongs to the period open when it was recorded,
