@@ -33,6 +33,8 @@ Read the answer:
 - `statements[]` — each file's detected format and row count. A file the parser refused is not
   staged: see banks.md § When a file is refused.
 - `dropped.out_of_period` — rows before the period; expected.
+- Rows set aside in an earlier batch stage `ignored` again (`guess_source: set_aside`), with that
+  batch's comment. Undo one only when the member says it is a transaction after all.
 - Rows the app settled: `duplicate` (already in the ledger by hand), a `transfer` pair (two
   rows moving the same money between the member's own accounts), a bill match
   (`occurrence_id` set). These need nothing from you.
@@ -58,7 +60,7 @@ Decide each row in this order; the first rule that applies wins:
 | a payment of a bill the app did not match (amount differs from the plan, or paid late) — check `list_bills` with `status: unpaid` | map it with the bill's `occurrence_id`; the plan adjusts |
 | a row whose precedents agree (two or more, one destination and plan, this member) | map it to that destination and plan; list it under "recorded from precedent" in your summary so the member can glance |
 | a counterparty or merchant the notes settle (e.g. "e-transfers to J. Smith are rent") | map it as the notes say |
-| a recurring charge with no schedule (a subscription, a new bill) | map it, and record it with `schedule_create` on the approve (`mode: fixed`, `frequency`, `interval`, `amount`) so the next period expects it |
+| a recurring charge with no schedule (a subscription, a new bill) | map it, and record it with `schedule_create` on the approve (`mode: fixed`, `frequency`, `interval`, `amount`, and `schedule_item_id` naming the row when the approve records several) so the next period expects it |
 | anything else — precedents split (between categories, or between budgets or unplanned in one category), none, an unknown counterparty, an amount that matches nothing | a question for the member (SKILL.md § Asking the household), the choices naming the budget or unplanned |
 
 Never choose from merchant text alone: the same store is Home one day and a child's fund the
