@@ -20,7 +20,18 @@ for a date range starting on the period's first day (rows before it are dropped 
 after the period's end belong to the next one). Pending card rows are included by the bank's
 export when it offers them; the app records them only with `include_pending`.
 
-A member hands the files to you in the conversation, or the notes say where they keep them.
+**When you drive a browser, fetch the files yourself.** Open each bank's online banking, ask the
+member to sign in — never type a member's credentials — and download every account's CSV. On a
+second import in the same period, start from the day the last export ended; skip an account
+with no new rows.
+
+| Bank | Online banking | Quirk |
+|---|---|---|
+| BMO | `https://www1.bmo.com/banking/digital/accounts` | the credit card export leaves out pending rows: read them from the card's page and record them with `record_transaction` |
+| Scotiabank | `https://secure.scotiabank.com/accounts` | |
+
+**Otherwise** — no browser, or no member present to sign in (a scheduled run) — the member hands
+you the files in the conversation, or the notes say where they keep them.
 
 ## When a file is refused
 
