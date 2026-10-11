@@ -134,7 +134,10 @@ for schedules the member said to end, and a `request_id`. Run `check_period` onc
 anything changed since step 5: the real write answers only the new period, so the figures you
 report come from that last check.
 
-Report: the closed period's net, the distributions into funds, and the new period's dates.
+Report: the closed period's net, the distributions into funds, and the new period's dates. Under
+custody, add the settlement the close leaves — `check_period`'s `settlement`: its `transfers`
+("Alice → Sam 120.00"), and its `drift` when that is not zero — so the period ends with who pays
+whom.
 
 ## 7. Write back
 

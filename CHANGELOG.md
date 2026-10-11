@@ -3,6 +3,13 @@
 The skill and the `/api/v1` and MCP surface it runs on, by skill version. The API itself changes in place
 with no compatibility window; a version here names the app build the skill was tested against.
 
+## 0.1.8 — 2026-10-11
+
+- "Who owes whom" reads `get_settlement` instead of computing it by hand: the app's money custody
+  (`custody: by_keeper`, a keeper per fund) gives the transfers, and `drift` says when the funds and
+  the accounts disagree; `absorb_drift` books it. Under `pooled` the skill offers custody.
+- A period close reports the settlement it leaves (`check_period`'s `settlement`).
+
 ## 0.1.7 — 2026-10-11
 
 - A schedule's `mode` is `bill` or `budget` (formerly `fixed` and `spread`; `flexible` is gone),

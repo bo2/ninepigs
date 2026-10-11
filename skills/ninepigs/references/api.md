@@ -34,7 +34,7 @@ key and body within 24 hours replays the first answer instead of writing again.
 | `complete_import`, `discard_import` | `POST /import-batches/{id}/complete`, `DELETE /import-batches/{id}` |
 | `list_imports` | `GET /import-batches`, `?status=reviewed` for finished ones |
 | `not_a_transfer` | `POST /import-batches/{id}/items/{item}/not-a-transfer` |
-| `check_period` | `--dry-run POST /periods` `{"start_date", "end_date", "balances": [{"account_id", "amount"}, …every account]}` → `meta.effects.unaccounted` per member |
+| `check_period` | `--dry-run POST /periods` `{"start_date", "end_date", "balances": [{"account_id", "amount"}, …every account]}` → `meta.effects.unaccounted` per member, and `meta.effects.settlement` under custody |
 | `open_period` | the same body with `--key`, plus `pending_transaction_ids`, `end_schedule_ids` |
 | `list_bills` | `GET /occurrences?status=due` and `status=overdue`; `GET /occurrences/matches?amount=…&date=…&text=…` ranks the bills a payment could settle |
 | `settle_bill` | `POST /occurrences/{id}/settle` (`amount`, `date`, `comment`, `user_id` optional) |
@@ -44,7 +44,10 @@ key and body within 24 hours replays the first answer instead of writing again.
 | `summarize_spending` | `GET /transactions/summary?date_from=…&date_to=…&group_by=category\|member\|month\|kind` |
 | `get_budget_status` | `GET /periods/current/budget` — "how much is left" is `totals.spending.redistributed.remaining` |
 | `list_schedules`, `create_schedule`, `update_schedule` | `GET /schedules`, `POST /schedules`, `PATCH /schedules/{id}` (`end_date` ends one) |
-| `get_fund_status`, `create_fund`, `update_fund`, `close_fund`, `transfer_between_funds` | `GET /funds`, `POST /funds`, `PATCH /funds/{id}`, `POST /funds/{id}/close` `{"move_to_fund_id"}`, `POST /funds/transfers` |
+| `get_fund_status`, `create_fund`, `update_fund`, `close_fund`, `transfer_between_funds` | `GET /funds`, `POST /funds`, `PATCH /funds/{id}` (`keeper_id` under custody), `POST /funds/{id}/close` `{"move_to_fund_id"}`, `POST /funds/transfers` |
+| `get_settlement` | `GET /settlement` — `custody`, `members` (`should_hold`, `holds`, `gap`), `transfers`, `drift`, `unattributed` |
+| `absorb_drift` | `--dry-run`, then `--key`, `POST /funds/{id}/absorb-drift` `{"comment"?}` — owner only |
+| custody (no tool) | `GET` / `PATCH /household` `{"custody": "pooled"\|"by_keeper", "default_keeper_id"}` — owner only |
 | `create_category` | `POST /categories` |
 | what changed | `GET /activity?since=…&api_token_id=…` |
 
