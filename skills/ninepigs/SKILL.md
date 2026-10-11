@@ -5,13 +5,13 @@ license: MIT
 compatibility: Needs the Ninepigs MCP server connected (https://api.ninepigs.com/mcp), or Python 3 with network access for scripts/ninepigs.py.
 metadata:
   author: ninepigs
-  version: "0.1.8"
+  version: "0.1.9"
 ---
 
 # Ninepigs
 
 Ninepigs keeps one household's shared books: what its members earn and spend, what they plan to
-(schedules, whose instances are bills and budgets), and what they save (funds). Money is budgeted
+(schedules: bills, budgets and income), and what they save (funds). Money is budgeted
 per **period**; closing a period checks every account's balance against what was recorded and
 opens the next. Every call acts inside the household of the token you hold.
 
