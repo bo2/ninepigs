@@ -45,8 +45,8 @@ Read the answer:
 
 `review_import` with the batch → every row a person must decide: date, amount, direction, bank
 text, and `precedents` (the household's past transactions for the same merchant, this member
-first, newest first, up to ten, each with its destination, the `schedule` it drew on — `mode`
-`spread` is a budget, `fixed` a bill — or `unplanned`, and its comment) with a `precedent_summary`
+first, newest first, up to ten, each with its destination, the `schedule` it drew on (its `mode`,
+`bill` or `budget`) or `unplanned`, and its comment) with a `precedent_summary`
 by category and schedule, such as `Home · Groceries 5, Home · unplanned 2, fund Kids 3`.
 
 A destination for a `spend` row is a category **and** its plan: the budget it draws on
@@ -61,7 +61,7 @@ Decide each row in this order; the first rule that applies wins:
 | a payment of a bill the app did not match (amount differs from the plan, or paid late) — check `list_bills` with `status: unpaid` | map it with the bill's `occurrence_id`; the plan adjusts |
 | a row whose precedents agree (two or more, one destination and plan, this member) | map it to that destination and plan; list it under "recorded from precedent" in your summary so the member can glance |
 | a counterparty or merchant the notes settle (e.g. "e-transfers to J. Smith are rent") | map it as the notes say |
-| a recurring charge with no schedule (a subscription, a new bill) | map it, and record it with `schedule_create` on the approve (`mode: fixed`, `frequency`, `interval`, `amount`, and `schedule_item_id` naming the row when the approve records several) so the next period expects it |
+| a recurring charge with no schedule (a subscription, a new bill) | map it, and record it with `schedule_create` on the approve (`mode: bill`, `frequency`, `interval`, `amount`, and `schedule_item_id` naming the row when the approve records several) so the next period expects it |
 | anything else — precedents split (between categories, or between budgets or unplanned in one category), none, an unknown counterparty, an amount that matches nothing | a question for the member (SKILL.md § Asking the household), the choices naming the budget or unplanned |
 
 Never choose from merchant text alone: the same store is Home one day and a child's fund the

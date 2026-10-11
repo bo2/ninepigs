@@ -3,6 +3,11 @@
 The skill and the `/api/v1` and MCP surface it runs on, by skill version. The API itself changes in place
 with no compatibility window; a version here names the app build the skill was tested against.
 
+## 0.1.7 — 2026-10-11
+
+- A schedule's `mode` is `bill` or `budget` (formerly `fixed` and `spread`; `flexible` is gone),
+  on every tool and in the period routine.
+
 ## 0.1.6 — 2026-10-11
 
 - An agent that drives a browser fetches the bank exports itself once the member signs in;
