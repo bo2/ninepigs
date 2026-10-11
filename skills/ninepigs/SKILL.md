@@ -5,7 +5,7 @@ license: MIT
 compatibility: Needs the Ninepigs MCP server connected (https://api.ninepigs.com/mcp), or Python 3 with network access for scripts/ninepigs.py.
 metadata:
   author: ninepigs
-  version: "0.1.7"
+  version: "0.1.8"
 ---
 
 # Ninepigs
@@ -108,14 +108,20 @@ is the answer); `summarize_spending` by category, member or month for totals;
 dates; `list_bills` for what is due. Answer in the household's currency with the period named. A
 transfer between members adds nothing to totals.
 
-"Who owes whom" in a household whose members keep personal funds, while their income lands in
-their own accounts: each member's net across their accounts (debit minus what the credit card
-owes, pending included) should equal the balances of the funds that are theirs; one member —
-usually whoever receives most of the income — also holds the shared funds and what is not yet
-distributed. The difference is the transfer. A member's spending from their own fund moves both
-sides equally and never changes it; a period close's distribution into a member's fund, and shared
-costs a member paid from their own accounts, do. Which funds are whose, and who holds the shared
-money, are the household's: read them from the notes, or ask and write them there.
+"Who owes whom" is `get_settlement`. It has figures only when the household tracks where fund
+money sits (`custody` is `by_keeper` in `get_context`): each fund has a keeper whose accounts
+should hold its money, and the default keeper also holds what no fund holds yet. Answer with its
+`transfers` ("Alice → Sam 120.00"); each member's `gap` is positive when they are owed. The
+figures come from the rows recorded so far, so rows not yet recorded — pending card charges
+included — move them until the period closes; say so. Check `drift` first: when it is not
+`0.00`, the funds and the accounts disagree by that much and the transfers do not add up. Name
+the drift; the owner can book it into a fund with `absorb_drift` (preview, name the amount and
+the fund, then book). A member's transfer, once made, is a `record_transaction` of kind
+`transfer` to the other member.
+
+Under `pooled` there are no figures. Offer custody instead of working it out by hand: the owner
+turns it on in Settings → Household (where the money sits, and the default keeper), and each
+personal fund gets its member as keeper (`update_fund` with `keeper`).
 
 ## Keeping plans current
 
