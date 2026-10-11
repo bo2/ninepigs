@@ -5,7 +5,7 @@ license: MIT
 compatibility: Needs the Ninepigs MCP server connected (https://api.ninepigs.com/mcp), or Python 3 with network access for scripts/ninepigs.py.
 metadata:
   author: ninepigs
-  version: "0.1.5"
+  version: "0.1.6"
 ---
 
 # Ninepigs
@@ -19,8 +19,8 @@ opens the next. Every call acts inside the household of the token you hold.
 
 1. `get_context` — who you act as, the members, categories, funds, the current period, your
    token's scope. No household yet (`household_required`) → [references/onboarding.md](references/onboarding.md).
-   Its `skill.version` is the skill version the app was tested against; when it differs from this
-   file's `metadata.version`, tell the user to update the skill before going on.
+   Its `skill.version` is the oldest skill version the app works with; when this file's
+   `metadata.version` is lower, tell the user to update the skill before going on.
 2. `read_notes` — the household's own conventions: which bank accounts each Ninepigs account
    stands for, who enters what by hand, who the e-transfer counterparties are, which merchants go
    where. Empty notes on a household that already has books → run the interview in
@@ -47,7 +47,8 @@ The full procedure, each step with its tool and inputs, is
 [references/period-routine.md](references/period-routine.md). In short:
 
 1. **Get the exports** — each member's bank CSVs for the period, the bank's own download,
-   unchanged ([references/banks.md](references/banks.md)).
+   unchanged, fetched in the browser after the member signs in when you drive one
+   ([references/banks.md](references/banks.md)).
 2. **Stage** — `stage_statement`, one batch per member. Read what the app settled (duplicates,
    transfer pairs, bill matches) and what it dropped (rows before the period).
 3. **Review** — `review_import` lists the rows a person must decide, each with precedents. Map

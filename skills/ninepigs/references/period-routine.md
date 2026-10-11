@@ -19,8 +19,9 @@ Stop here if the token is `read`: the routine writes.
 
 One CSV per bank account per member, covering the current period from its first day (rows before
 it are dropped as out of period; a row the bank posted after the period's end is next period's).
-The bank's own download, unchanged — [banks.md](banks.md) says which banks and how. A member
-hands you the files, or you fetch them where the notes say they are kept.
+The bank's own download, unchanged — [banks.md](banks.md) says which banks and how. With a
+browser you fetch them from online banking once the member signs in; otherwise the member hands
+you the files, or you fetch them where the notes say they are kept.
 
 ## 2. Stage
 
