@@ -3,6 +3,10 @@
 The skill and the `/api/v1` and MCP surface it runs on, by skill version. The API itself changes in place
 with no compatibility window; a version here names the app build the skill was tested against.
 
+## 0.1.9 — 2026-10-11
+
+- The overview names the three kinds of schedule: bills, budgets and income.
+
 ## 0.1.8 — 2026-10-11
 
 - "Who owes whom" reads `get_settlement` instead of computing it by hand: the app's money custody
