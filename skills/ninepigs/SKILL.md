@@ -5,7 +5,7 @@ license: MIT
 compatibility: Needs the Ninepigs MCP server connected (https://api.ninepigs.com/mcp), or Python 3 with network access for scripts/ninepigs.py.
 metadata:
   author: ninepigs
-  version: "0.1.9"
+  version: "0.1.10"
 ---
 
 # Ninepigs
@@ -94,8 +94,11 @@ screen.
 - Preview first: `approve_import`, `record_transaction`, `settle_bill` and `open_period` take a
   dry run that reports the effects without writing. Use it whenever the effect is not obvious.
 - Give each intended write its own `request_id` and reuse it only to retry that write.
-- Before recording a member's spending by hand, `find_transactions` for the amount and date: an
-  import may have recorded it already, and the import's dedup does not run again afterwards.
+- Recording by hand is checked against the rows waiting in import review and the recorded
+  transactions: a likely match is refused as `possible_duplicate`, with the matches. A waiting row
+  is the bank's copy of the same money: record it (`map_import_rows`, `approve_import`) with the
+  member's category and comment. A recorded one may only need `update_transaction`. Send
+  `allow_duplicate` only when the member confirms the money moved twice.
 - Token scope: `read` answers questions; `record` runs the import and records money but cannot
   change a row or the notes; `write` does everything. A refused call names the scope it needs —
   say so rather than working around it.
