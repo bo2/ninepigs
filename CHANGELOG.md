@@ -3,6 +3,12 @@
 The skill and the `/api/v1` and MCP surface it runs on, by skill version. The API itself changes in place
 with no compatibility window; a version here names the app build the skill was tested against.
 
+## 0.1.10 — 2026-10-14
+
+- Recording by hand no longer searches for duplicates first: the app refuses a likely match as
+  `possible_duplicate`, with the rows waiting in review and the recorded transactions it may be.
+  The skill records the waiting row, or updates the recorded one, instead.
+
 ## 0.1.9 — 2026-10-11
 
 - The overview names the three kinds of schedule: bills, budgets and income.
