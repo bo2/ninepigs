@@ -5,7 +5,7 @@ license: MIT
 compatibility: Needs the Ninepigs MCP server connected (https://api.ninepigs.com/mcp), or Python 3 with network access for scripts/ninepigs.py.
 metadata:
   author: ninepigs
-  version: "0.1.10"
+  version: "0.1.11"
 ---
 
 # Ninepigs
@@ -108,8 +108,10 @@ screen.
 `get_budget_status` for "how are we doing" and "how much is left" (the redistributed remaining
 is the answer); `summarize_spending` by category, member or month for totals;
 `find_transactions` for "what was that charge"; `get_fund_status` for goals and their projected
-dates; `list_bills` for what is due. Answer in the household's currency with the period named. A
-transfer between members adds nothing to totals.
+dates; `get_fund_statement` for how a fund got to its balance, with what a period close paid in and
+money moved between funds, which `find_transactions` does not list; `list_bills` for what is due.
+Answer in the household's currency with the period named. A transfer between members adds nothing
+to totals.
 
 "Who owes whom" is `get_settlement`. It has figures only when the household tracks where fund
 money sits (`custody` is `by_keeper` in `get_context`): each fund has a keeper whose accounts

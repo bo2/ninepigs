@@ -3,6 +3,12 @@
 The skill and the `/api/v1` and MCP surface it runs on, by skill version. The API itself changes in place
 with no compatibility window; a version here names the app build the skill was tested against.
 
+## 0.1.11 — 2026-11-06
+
+- "How did this fund get to its balance?" reads `get_fund_statement`: per period, the opening and
+  closing balance and every row that moved the fund, including what a close paid in and money moved
+  between funds.
+
 ## 0.1.10 — 2026-10-14
 
 - Recording by hand no longer searches for duplicates first: the app refuses a likely match as
