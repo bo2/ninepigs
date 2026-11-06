@@ -45,6 +45,7 @@ key and body within 24 hours replays the first answer instead of writing again.
 | `get_budget_status` | `GET /periods/current/budget` — "how much is left" is `totals.spending.redistributed.remaining` |
 | `list_schedules`, `create_schedule`, `update_schedule` | `GET /schedules`, `POST /schedules`, `PATCH /schedules/{id}` (`end_date` ends one) |
 | `get_fund_status`, `create_fund`, `update_fund`, `close_fund`, `transfer_between_funds` | `GET /funds`, `POST /funds`, `PATCH /funds/{id}` (`keeper_id` under custody), `POST /funds/{id}/close` `{"move_to_fund_id"}`, `POST /funds/transfers` |
+| `get_fund_statement` | `GET /funds/{id}/statement?period_id=…&limit=…` — per period, newest first: `opening_balance`, `rows`, `closing_balance` |
 | `get_settlement` | `GET /settlement` — `custody`, `members` (`should_hold`, `holds`, `gap`), `transfers`, `drift`, `unattributed` |
 | `absorb_drift` | `--dry-run`, then `--key`, `POST /funds/{id}/absorb-drift` `{"comment"?}` — owner only |
 | custody (no tool) | `GET` / `PATCH /household` `{"custody": "pooled"\|"by_keeper", "default_keeper_id"}` — owner only |
