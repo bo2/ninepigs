@@ -3,6 +3,14 @@
 The skill and the `/api/v1` and MCP surface it runs on, by skill version. The API itself changes in place
 with no compatibility window; a version here names the app build the skill was tested against.
 
+## 0.1.12 — 2026-11-11
+
+- Setting a household up moves from the app to the agent. The member signs up, starts the connection
+  and creates or joins the household on the consent screen; the agent then sets the currency
+  (`update_household`), adds each member's accounts (`create_account`), invites members
+  (`invite_member`, only an address the owner gives), and opens the first period. `get_context` →
+  `setup` says what is left.
+
 ## 0.1.11 — 2026-11-06
 
 - "How did this fund get to its balance?" reads `get_fund_statement`: per period, the opening and

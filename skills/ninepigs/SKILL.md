@@ -5,7 +5,7 @@ license: MIT
 compatibility: Needs the Ninepigs MCP server connected (https://api.ninepigs.com/mcp), or Python 3 with network access for scripts/ninepigs.py.
 metadata:
   author: ninepigs
-  version: "0.1.11"
+  version: "0.1.12"
 ---
 
 # Ninepigs
@@ -18,7 +18,8 @@ opens the next. Every call acts inside the household of the token you hold.
 ## Every session
 
 1. `get_context` — who you act as, the members, categories, funds, the current period, your
-   token's scope. No household yet (`household_required`) → [references/onboarding.md](references/onboarding.md).
+   token's scope, and `setup` — what setting the household up still needs. No household yet
+   (`household_required`) or `setup` not empty → [references/onboarding.md](references/onboarding.md).
    Its `skill.version` is the oldest skill version the app works with; when this file's
    `metadata.version` is lower, tell the user to update the skill before going on.
 2. `read_notes` — the household's own conventions: which bank accounts each Ninepigs account

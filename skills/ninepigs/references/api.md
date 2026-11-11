@@ -27,6 +27,10 @@ key and body within 24 hours replays the first answer instead of writing again.
 | `get_context` | `GET /me` — `user.id` is your `user_id`; `members`, `categories`, `funds` by id and name; `current_period`; `token.scope` |
 | `read_notes`, `update_notes` | `GET /notes`, `PUT /notes` `{"content": "…"}` |
 | `list_accounts` | `GET /accounts` |
+| `update_household` | `PATCH /household` `{"name"?, "currency"?}` — owner only; the currency only while no money is recorded |
+| `create_account`, `update_account`, `delete_account` | `POST /accounts` `{"name", "user_id", "is_credit", "opening_balance"?}`, `PATCH /accounts/{id}`, `DELETE /accounts/{id}` |
+| `update_member` | `GET /members?include_read_only=true`, `PATCH /members/{id}` `{"role"}` — owner only |
+| `invite_member`, `list_invites`, `revoke_invite` | `POST /household/invites` `{"email", "role"?}`, `GET /household/invites`, `DELETE /household/invites/{id}` — owner only |
 | `stage_statement` | `--form POST /import-batches` with `user_id`, `include_pending`, `source=agent`, `files[]=@…` |
 | `review_import` | `GET /import-batches/{id}/items?needs=review` — each row with `precedents` and `precedent_summary` |
 | `map_import_rows` | `PATCH /import-batches/{id}/items` `{"items": [{"id", "kind"?, "category_id"?, "fund_id"?, "to_user_id"?, "schedule_id"?, "occurrence_id"?, "unplanned"?, "comment"?, "status"?}]}` — a spend names its budget (`schedule_id`), its bill (`occurrence_id`, which brings its schedule) or `unplanned: true` (`write` scope) — or let the mappings ride along on the approve, which `record` allows |
