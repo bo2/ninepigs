@@ -7,6 +7,6 @@ dependencies:
   tools:
     - type: "mcp"
       value: "ninepigs"
-      description: "Ninepigs MCP server: the household's books"
+      description: "Ninepigs MCP server: the household's records"
       transport: "streamable_http"
       url: "https://api.ninepigs.com/mcp"
