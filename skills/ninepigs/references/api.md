@@ -54,6 +54,8 @@ key and body within 24 hours replays the first answer instead of writing again.
 | `absorb_drift` | `--dry-run`, then `--key`, `POST /funds/{id}/absorb-drift` `{"comment"?}` — owner only |
 | custody (no tool) | `GET` / `PATCH /household` `{"custody": "pooled"\|"by_keeper", "default_keeper_id"}` — owner only |
 | `create_category` | `POST /categories` |
+| `delete_category` | `--dry-run DELETE /categories/{id}` first: a category its live schedules still plan bills in needs each one ended (`end_schedule_ids`) or moved (`move_schedule_ids` with `move_schedules_to`); ask the person per schedule, then send them. One anything is filed under is archived (its transactions keep it), an empty one is deleted for good; `result` says which. Transactions never move. `GET /categories/{id}/references` lists the live schedules |
+| `restore_category` | `GET /categories?archived=true`, then `POST /categories/{id}/restore` — back in the pickers, last in the order; ended or moved schedules stay as they are |
 | what changed | `GET /activity?since=…&api_token_id=…` |
 
 ## Errors worth knowing
@@ -64,7 +66,7 @@ key and body within 24 hours replays the first answer instead of writing again.
 | `token_read_only`, `token_record_only` 403 | the scope does not reach this call | say which scope it needs |
 | `token_forbidden_route` 403 | the path is outside `/api/v1` | fix the path |
 | `household_required` 409 | the account has no household | onboarding stage 1 |
-| `conflict` 409 | the books refuse the write; the message names what to resolve (a batch with pending rows, a fund with a balance) | resolve it first |
+| `conflict` 409 | the records refuse the write; the message names what to resolve (a batch with pending rows, a fund with a balance) | resolve it first |
 | `validation_failed` 422 | `error.fields` names each bad field | fix the body |
 | `idempotency_conflict` 422 | the key was used with a different body | a new key for a new write |
 | `rate_limited` 429 | over 60 a minute | the script waits once; slow a loop down |

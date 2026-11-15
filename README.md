@@ -3,7 +3,7 @@
 [Ninepigs](https://ninepigs.com) keeps a household's shared money: what its members earn and spend,
 what they plan to, and what they save. This repository is what an AI agent needs to run it for you:
 the **skill** that teaches an agent the routine, and the install steps for each agent. The agent
-works on your household's live books through Ninepigs' MCP server, with a token you create and can
+works on your household's live records through Ninepigs' MCP server, with a token you create and can
 revoke at any time.
 
 What the skill does, once installed:
@@ -47,7 +47,7 @@ Hosted agents (Claude.ai, ChatGPT) connect through OAuth instead and ask for the
 | **ChatGPT** | import the `skills/ninepigs` folder from this repository (Create → Upload) | add `https://api.ninepigs.com/mcp` as a custom MCP connector in developer mode |
 
 Check it works: start a new session and ask "What's my household's currency?". The agent answers
-from your books.
+from your records.
 
 ### Without an MCP connection
 
@@ -60,7 +60,7 @@ dependencies, token in `NINEPIGS_API_TOKEN`). The API reference is at
 
 - Treat the token like a password; revoke it in Settings → Security to disconnect an agent at once.
 - Give each agent its own token, so revoking one does not disconnect the rest.
-- Writes land in your books immediately, for the whole household to see. The skill confirms
+- Writes are recorded immediately, for the whole household to see. The skill confirms
   amounts, dates and destinations with you before recording; if an agent does not, ask it to.
 - The household notes are yours: read and correct them in the app under your household settings.
 

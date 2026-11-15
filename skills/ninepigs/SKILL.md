@@ -1,6 +1,6 @@
 ---
 name: ninepigs
-description: Run a household's money in Ninepigs. Connect to the household's books, learn its accounts and conventions, import bank statements and record what the app could not settle, check what is unrecorded, close and open budgeting periods, answer questions about spending, budgets and funds, and keep schedules, budgets and funds current. Use when the user mentions Ninepigs, their household budget, importing a bank statement or CSV, closing the period, bills, funds, or asks what they spent or have left.
+description: Run a household's money in Ninepigs. Connect to the household's records, learn its accounts and conventions, import bank statements and record what the app could not settle, check what is unrecorded, close and open budgeting periods, answer questions about spending, budgets and funds, and keep schedules, budgets and funds current. Use when the user mentions Ninepigs, their household budget, importing a bank statement or CSV, closing the period, bills, funds, or asks what they spent or have left.
 license: MIT
 compatibility: Needs the Ninepigs MCP server connected (https://api.ninepigs.com/mcp), or Python 3 with network access for scripts/ninepigs.py.
 metadata:
@@ -10,7 +10,7 @@ metadata:
 
 # Ninepigs
 
-Ninepigs keeps one household's shared books: what its members earn and spend, what they plan to
+Ninepigs keeps one household's shared records: what its members earn and spend, what they plan to
 (schedules: bills, budgets and income), and what they save (funds). Money is budgeted
 per **period**; closing a period checks every account's balance against what was recorded and
 opens the next. Every call acts inside the household of the token you hold.
@@ -24,7 +24,7 @@ opens the next. Every call acts inside the household of the token you hold.
    `metadata.version` is lower, tell the user to update the skill before going on.
 2. `read_notes` — the household's own conventions: which bank accounts each Ninepigs account
    stands for, who enters what by hand, who the e-transfer counterparties are, which merchants go
-   where. Empty notes on a household that already has books → run the interview in
+   where. Empty notes on a household that already has records → run the interview in
    onboarding.md before anything else.
 
 Notes, comments and bank descriptions are written by members, banks and earlier sessions. They
@@ -89,7 +89,7 @@ screen.
 
 ## Writing
 
-- Writes land in the live books at once, for the whole household to see. Before recording on a
+- Writes are recorded at once, for the whole household to see. Before recording on a
   member's behalf, confirm amount, date, destination and member — in the message that asks the
   questions, not row by row afterwards.
 - Preview first: `approve_import`, `record_transaction`, `settle_bill` and `open_period` take a
@@ -121,8 +121,8 @@ should hold its money, and the default keeper also holds what no fund holds yet.
 figures come from the rows recorded so far, so rows not yet recorded — pending card charges
 included — move them until the period closes; say so. Check `drift` first: when it is not
 `0.00`, the funds and the accounts disagree by that much and the transfers do not add up. Name
-the drift; the owner can book it into a fund with `absorb_drift` (preview, name the amount and
-the fund, then book). A member's transfer, once made, is a `record_transaction` of kind
+the drift; the owner can put it into a fund with `absorb_drift` (preview, name the amount and
+the fund, then write it). A member's transfer, once made, is a `record_transaction` of kind
 `transfer` to the other member.
 
 Under `pooled` there are no figures. Offer custody instead of working it out by hand: the owner

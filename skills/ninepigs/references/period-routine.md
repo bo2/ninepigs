@@ -110,7 +110,7 @@ say, usually 0). Balances come from the member or from the bank's account page.
   in any order, so the last row's balance may be from before another row that day. Take the
   closing balance from the account page.
 
-The answer is `unaccounted` per member: what their accounts moved that the books do not show.
+The answer is `unaccounted` per member: what their accounts moved that the records do not show.
 Near zero for everyone → the period is ready. Otherwise, in this order:
 
 1. The notes' balance convention — a Ninepigs account that stands for two bank accounts needs
