@@ -3,6 +3,19 @@
 The skill and the `/api/v1` and MCP surface it runs on, by skill version. The API itself changes in place
 with no compatibility window; a version here names the app build the skill was tested against.
 
+## 0.1.13 — 2026-11-16
+
+- A schedule's new amount starts at a payment or date the member picks (`amount_change_options`,
+  `update_schedule` with `effective_from`); earlier payments keep the old amount, and the change can
+  be undone until the first payment at the new amount (`undo_amount_change`).
+- `correct_opening_balance` fixes an account's opening balance in the open period where it was first
+  given.
+- Statements are staged with the account each file is from, and a transfer row names the account it
+  went to (`to_account`). `check_period` lists card payments still `in_transit`; the close passes
+  the confirmed ones as pending instead of adjusting a balance by hand. Statements are exported on
+  the period's last day.
+- Archiving a category ends or moves its schedules, and an archived category can be restored.
+
 ## 0.1.12 — 2026-11-11
 
 - Setting a household up moves from the app to the agent. The member signs up, starts the connection

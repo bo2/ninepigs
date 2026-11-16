@@ -47,7 +47,10 @@ key and body within 24 hours replays the first answer instead of writing again.
 | `find_transactions` | `GET /transactions?search=…&date_from=…&user_id=…&kind=…&status=unplanned\|overspent` |
 | `summarize_spending` | `GET /transactions/summary?date_from=…&date_to=…&group_by=category\|member\|month\|kind` |
 | `get_budget_status` | `GET /periods/current/budget` — "how much is left" is `totals.spending.redistributed.remaining` |
-| `list_schedules`, `create_schedule`, `update_schedule` | `GET /schedules`, `POST /schedules`, `PATCH /schedules/{id}` (`end_date` ends one) |
+| `list_schedules`, `create_schedule`, `update_schedule` | `GET /schedules`, `POST /schedules`, `PATCH /schedules/{id}` (`end_date` ends one; a new `amount` needs `effective_from`) |
+| `amount_change_options` | `GET /schedules/{id}/amount-change-options` |
+| `update_schedule` with `undo_amount_change` | `DELETE /schedules/{id}/amount-change` |
+| `correct_opening_balance` | `PATCH /periods/{id}/opening-balances` `{"balances": [{"account_id", "amount"}]}`, `preview` |
 | `get_fund_status`, `create_fund`, `update_fund`, `close_fund`, `transfer_between_funds` | `GET /funds`, `POST /funds`, `PATCH /funds/{id}` (`keeper_id` under custody), `POST /funds/{id}/close` `{"move_to_fund_id"}`, `POST /funds/transfers` |
 | `get_fund_statement` | `GET /funds/{id}/statement?period_id=…&limit=…` — per period, newest first: `opening_balance`, `rows`, `closing_balance` |
 | `get_settlement` | `GET /settlement` — `custody`, `members` (`should_hold`, `holds`, `gap`), `transfers`, `drift`, `unattributed` |
