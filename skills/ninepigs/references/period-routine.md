@@ -107,7 +107,9 @@ check. A batch you cannot finish stays open in the app's review screen for the m
 
 `check_period` with the period's dates and every account's closing balance as the bank shows it
 on the period's last day (a credit account's balance is what is owed; cash accounts as the notes
-say, usually 0). Balances come from the member or from the bank's account page.
+say, usually 0). Balances come from the member or from the bank's account page. They open the next
+period and are not corrected after the close (`correct_opening_balance` refuses them): read each
+from the bank, not from memory, and a wrong one shows as unaccounted at the next close.
 
 - **Pending card charges.** When pending rows were recorded (`include_pending`), the card balance
   you enter is the bank's current balance **plus its pending total**: the bank leaves pending out,
