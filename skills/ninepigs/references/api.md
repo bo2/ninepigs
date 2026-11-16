@@ -31,14 +31,14 @@ key and body within 24 hours replays the first answer instead of writing again.
 | `create_account`, `update_account`, `delete_account` | `POST /accounts` `{"name", "user_id", "is_credit", "opening_balance"?}`, `PATCH /accounts/{id}`, `DELETE /accounts/{id}` |
 | `update_member` | `GET /members?include_read_only=true`, `PATCH /members/{id}` `{"role"}` — owner only |
 | `invite_member`, `list_invites`, `revoke_invite` | `POST /household/invites` `{"email", "role"?}`, `GET /household/invites`, `DELETE /household/invites/{id}` — owner only |
-| `stage_statement` | `--form POST /import-batches` with `user_id`, `include_pending`, `source=agent`, `files[]=@…` |
+| `stage_statement` | `--form POST /import-batches` with `user_id`, `include_pending`, `source=agent`, `files[]=@…`, and `accounts[i]=<account_id>` for file `i` |
 | `review_import` | `GET /import-batches/{id}/items?needs=review` — each row with `precedents` and `precedent_summary` |
-| `map_import_rows` | `PATCH /import-batches/{id}/items` `{"items": [{"id", "kind"?, "category_id"?, "fund_id"?, "to_user_id"?, "schedule_id"?, "occurrence_id"?, "unplanned"?, "comment"?, "status"?}]}` — a spend names its budget (`schedule_id`), its bill (`occurrence_id`, which brings its schedule) or `unplanned: true` (`write` scope) — or let the mappings ride along on the approve, which `record` allows |
+| `map_import_rows` | `PATCH /import-batches/{id}/items` `{"items": [{"id", "kind"?, "category_id"?, "fund_id"?, "to_user_id"?, "bank_account_id"?, "to_bank_account_id"?, "schedule_id"?, "occurrence_id"?, "unplanned"?, "comment"?, "status"?}]}` — a spend names its budget (`schedule_id`), its bill (`occurrence_id`, which brings its schedule) or `unplanned: true` (`write` scope) — or let the mappings ride along on the approve, which `record` allows |
 | `approve_import` | `POST /import-batches/{id}/approve` `{"items": [...]}` or `{"item_ids": [...]}`, plus `schedule_create` / `schedule_patch` with `schedule_item_id` naming its row when several are approved, `force`; `--dry-run` first, then `--key` |
 | `complete_import`, `discard_import` | `POST /import-batches/{id}/complete`, `DELETE /import-batches/{id}` |
 | `list_imports` | `GET /import-batches`, `?status=reviewed` for finished ones |
 | `not_a_transfer` | `POST /import-batches/{id}/items/{item}/not-a-transfer` |
-| `check_period` | `--dry-run POST /periods` `{"start_date", "end_date", "balances": [{"account_id", "amount"}, …every account]}` → `meta.effects.unaccounted` per member, and `meta.effects.settlement` under custody |
+| `check_period` | `--dry-run POST /periods` `{"start_date", "end_date", "balances": [{"account_id", "amount"}, …every account]}` → `meta.effects.unaccounted` per member, `meta.effects.in_transit`, and `meta.effects.settlement` under custody; `pending_transaction_ids` as on `open_period` |
 | `open_period` | the same body with `--key`, plus `pending_transaction_ids`, `end_schedule_ids` |
 | `list_bills` | `GET /occurrences?status=due` and `status=overdue`; `GET /occurrences/matches?amount=…&date=…&text=…` ranks the bills a payment could settle |
 | `settle_bill` | `POST /occurrences/{id}/settle` (`amount`, `date`, `comment`, `user_id` optional) |
@@ -47,7 +47,10 @@ key and body within 24 hours replays the first answer instead of writing again.
 | `find_transactions` | `GET /transactions?search=…&date_from=…&user_id=…&kind=…&status=unplanned\|overspent` |
 | `summarize_spending` | `GET /transactions/summary?date_from=…&date_to=…&group_by=category\|member\|month\|kind` |
 | `get_budget_status` | `GET /periods/current/budget` — "how much is left" is `totals.spending.redistributed.remaining` |
-| `list_schedules`, `create_schedule`, `update_schedule` | `GET /schedules`, `POST /schedules`, `PATCH /schedules/{id}` (`end_date` ends one) |
+| `list_schedules`, `create_schedule`, `update_schedule` | `GET /schedules`, `POST /schedules`, `PATCH /schedules/{id}` (`end_date` ends one; a new `amount` needs `effective_from`) |
+| `amount_change_options` | `GET /schedules/{id}/amount-change-options` |
+| `update_schedule` with `undo_amount_change` | `DELETE /schedules/{id}/amount-change` |
+| `correct_opening_balance` | `PATCH /periods/{id}/opening-balances` `{"balances": [{"account_id", "amount"}]}`, `preview` |
 | `get_fund_status`, `create_fund`, `update_fund`, `close_fund`, `transfer_between_funds` | `GET /funds`, `POST /funds`, `PATCH /funds/{id}` (`keeper_id` under custody), `POST /funds/{id}/close` `{"move_to_fund_id"}`, `POST /funds/transfers` |
 | `get_fund_statement` | `GET /funds/{id}/statement?period_id=…&limit=…` — per period, newest first: `opening_balance`, `rows`, `closing_balance` |
 | `get_settlement` | `GET /settlement` — `custody`, `members` (`should_hold`, `holds`, `gap`), `transfers`, `drift`, `unattributed` |

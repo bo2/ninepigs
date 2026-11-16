@@ -5,7 +5,7 @@ license: MIT
 compatibility: Needs the Ninepigs MCP server connected (https://api.ninepigs.com/mcp), or Python 3 with network access for scripts/ninepigs.py.
 metadata:
   author: ninepigs
-  version: "0.1.12"
+  version: "0.1.13"
 ---
 
 # Ninepigs
@@ -131,7 +131,11 @@ personal fund gets its member as keeper (`update_fund` with `keeper`).
 
 ## Keeping plans current
 
-- A bill's amount changed → `update_schedule`. A new recurring charge in an import → create its
+- A bill's or budget's amount changed → `amount_change_options` for where it can start (a bill's
+  next or a later unpaid payment; a budget's current or next stretch, or a date), then
+  `update_schedule` with `amount` and that `effective_from`. Earlier payments keep the old amount.
+  The change waits — for a bill until a payment of exactly the new amount, for a budget until a
+  payment on or after its start — and `undo_amount_change` cancels it until then. A new recurring charge in an import → create its
   schedule while recording the row (`schedule_create` on the approve) so the next period expects
   it. A subscription cancelled → end the schedule at the period's end.
 - A budget always overspent or never used → propose the change with the numbers from

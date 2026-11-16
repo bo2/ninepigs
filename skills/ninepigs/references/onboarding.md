@@ -44,7 +44,8 @@ after each step. Confirm each write with the member before making it; the househ
    balance on that first day — for a card, what was owed, positive — then `check_period` with
    every balance, confirm its figures, and `open_period`.
    An account added after this needs its `opening_balance`: its balance on the open period's start
-   date.
+   date. An opening balance found wrong later is fixed with `correct_opening_balance` while the
+   period it was first given in is still open.
 
 ## Stage 3 — learn the household
 

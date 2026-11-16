@@ -23,9 +23,15 @@ The bank's own download, unchanged — [banks.md](banks.md) says which banks and
 browser you fetch them from online banking once the member signs in; otherwise the member hands
 you the files, or you fetch them where the notes say they are kept.
 
+Export them on the period's last day, just before closing: the close reads a card payment the
+card's file does not show as still on its way (step 5), which holds only when every file is that
+day's.
+
 ## 2. Stage
 
-`stage_statement` with `member` and the member's files as `{name, content}`; `include_pending`
+`stage_statement` with `member` and the member's files as `{name, content, account}`, `account`
+naming the member's account the file is from. It may be left out when the member has one account
+of the file's kind (card or not); a file the app cannot place fails the call, naming it. `include_pending`
 when the member wants pending card rows recorded now (they come back as `(pending)` in the bank
 text). One batch per member; a batch is scoped to one member.
 
@@ -62,6 +68,7 @@ Decide each row in this order; the first rule that applies wins:
 | a row whose precedents agree (two or more, one destination and plan, this member) | map it to that destination and plan; list it under "recorded from precedent" in your summary so the member can glance |
 | a counterparty or merchant the notes settle (e.g. "e-transfers to J. Smith are rent") | map it as the notes say |
 | a recurring charge with no schedule (a subscription, a new bill) | map it, and record it with `schedule_create` on the approve (`mode: bill`, `frequency`, `interval`, `amount`, and `schedule_item_id` naming the row when the approve records several) so the next period expects it |
+| a transfer between accounts whose other side is on none of the files (a card payment the card's export does not show yet) | map it `kind: transfer` with `to_member`, and `to_account` naming the account the money went to when that member has more than one other account; step 5 lists it as in transit |
 | anything else — precedents split (between categories, or between budgets or unplanned in one category), none, an unknown counterparty, an amount that matches nothing | a question for the member (SKILL.md § Asking the household), the choices naming the budget or unplanned |
 
 Never choose from merchant text alone: the same store is Home one day and a child's fund the
@@ -106,6 +113,12 @@ say, usually 0). Balances come from the member or from the bank's account page.
   you enter is the bank's current balance **plus its pending total**: the bank leaves pending out,
   the ledger already has it. Otherwise the check is off by exactly the pending total, and a later
   error can hide it.
+- **Payments in transit.** Enter every balance as the bank shows it; never lower or raise one to
+  make up for a payment on its way. `in_transit` lists the transfers from the period's last 7 days
+  that left one account and have not reached the other's statement — a card payment made days
+  before the close. Show them to the member and pass the ones they confirm as
+  `pending_transaction_ids`, on this check and on `open_period`. The card's late row in the next
+  period is then set aside as already recorded.
 - **Running balances in an export** are not a closing balance: rows sharing a date can be printed
   in any order, so the last row's balance may be from before another row that day. Take the
   closing balance from the account page.
@@ -121,7 +134,10 @@ Near zero for everyone → the period is ready. Otherwise, in this order:
 3. A hand entry with a typo (amount, direction, member), or a hand entry duplicating a bank row
    recorded by the import: `find_transactions` with the period and the member;
    `update_transaction` fixes it, `delete_transaction` removes a duplicate.
-4. A cash expense nobody recorded: the member's call.
+4. A gap equal to a card payment from the period's last days that `in_transit` does not list:
+   it was recorded without `to_account`, so the close cannot place it. Tell the member which
+   payment it is; the gap closes as unaccounted.
+5. A cash expense nobody recorded: the member's call.
 
 Report the figure per member and what explains it; do not open the period on a figure the member
 has not accepted.
@@ -129,7 +145,7 @@ has not accepted.
 ## 6. Close and open
 
 `open_period` with the next period's dates (the household's period length is in the notes; the
-new period starts the day the current one ends), the balances from step 5, `end_schedule_ids`
+new period starts the day the current one ends), the balances and confirmed `pending_transaction_ids` from step 5, `end_schedule_ids`
 for schedules the member said to end, and a `request_id`. Run `check_period` once more when
 anything changed since step 5: the real write answers only the new period, so the figures you
 report come from that last check.
