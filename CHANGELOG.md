@@ -3,6 +3,11 @@
 The skill and the `/api/v1` and MCP surface it runs on, by skill version. The API itself changes in place
 with no compatibility window; a version here names the app build the skill was tested against.
 
+## 0.1.14 — 2026-11-16
+
+- The close says its balances open the next period and are not corrected afterwards; a wrong one
+  shows as unaccounted at the next close.
+
 ## 0.1.13 — 2026-11-16
 
 - A schedule's new amount starts at a payment or date the member picks (`amount_change_options`,
