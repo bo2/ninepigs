@@ -21,15 +21,17 @@ A call that answers `household_required` means step 3 is not done; send the memb
 
 ## Stage 2 — set the household up
 
-`get_context` → `setup` lists what is left, and is empty once the household is set up: `accounts`
-(a member holds only cash), `first_period` (no period is open), `notes` (stage 3). Read it again
+`get_context` → `setup` lists what is left, and is empty once the household is set up: `currency`
+(nobody has chosen it yet), `accounts` (a member holds only cash), `first_period` (no period is
+open), `notes` (stage 3). Read it again
 after each step. Confirm each write with the member before making it; the household-wide ones
 (currency, invites) are the owner's.
 
-1. **Currency.** Ask which currency the household's records are kept in and set it with `update_household`
-   before any money: every amount is stored in it and none is converted, so once a period is open
-   it is fixed.
-2. **Accounts.** Every member has a cash account already. For each member, `create_account` for
+1. **Currency.** While `setup` lists `currency`, ask the owner which currency the household's records
+   are kept in — even when the one `get_context` shows looks right; it is only the default — and
+   set the answer with `update_household`, including keeping the shown one. Do it before any money:
+   every amount is stored in it and none is converted, so once a period is open it is fixed.
+2. **Accounts.** Every member has a cash account already, named after them ("Petr cash"). For each member, `create_account` for
    each set of bank accounts they reconcile together: a chequing-type account and a credit card
    are the usual pair, with `credit` true for a card or line of credit. Leave `opening_balance`
    out — the first period takes every balance. An account stands for the bank accounts the member
@@ -39,7 +41,9 @@ after each step. Confirm each write with the member before making it; the househ
    invite grants a login to the household's records that outlasts this connection. The invited member signs up
    and accepts it in the app; add their accounts once they appear in `get_context` → `members`.
 4. **Categories and funds.** The default categories are a fine start; `create_category`,
-   `create_fund` for what the household names.
+   `create_fund` for what the household names. A fund needs its cap: a fixed amount per month (or
+   other window) or a percent of what is left at its turn. Ask for it; funds fill in order, so a
+   high percent early in the order leaves little for the funds after it.
 5. **The first period.** Ask its first day and length (two weeks, a month) and each account's
    balance on that first day — for a card, what was owed, positive — then `check_period` with
    every balance, confirm its figures, and `open_period`.
