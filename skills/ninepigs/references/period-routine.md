@@ -39,7 +39,9 @@ Read the answer:
 
 - `statements[]` — each file's detected format and row count. A file the parser refused is not
   staged: see banks.md § When a file is refused.
-- `dropped.out_of_period` — rows before the period; expected.
+- `dropped.out_of_period` — rows before the period; expected. `dropped.after_period` — rows after
+  the end of a period that has ended (a household building its past periods); they are staged again
+  once the next period opens.
 - Rows set aside in an earlier batch stage `ignored` again (`guess_source: set_aside`), with that
   batch's comment. Undo one only when the member says it is a transaction after all.
 - Rows the app settled: `duplicate` (already in the ledger by hand), a `transfer` pair (two
@@ -51,13 +53,15 @@ Read the answer:
 
 `review_import` with the batch → every row a person must decide: date, amount, direction, bank
 text, and `precedents` (the household's past transactions for the same merchant, this member
-first, newest first, up to ten, each with its destination, the `schedule` it drew on (its `mode`,
-`bill` or `budget`) or `unplanned`, and its comment) with a `precedent_summary`
-by category and schedule, such as `Home · Groceries 5, Home · unplanned 2, fund Kids 3`.
+first, newest first, up to three, each with its date, amount, kind, category or fund, and member)
+with a `precedent_summary` counting where up to ten went, by category and schedule, such as
+`Home · Groceries 5, Home · unplanned 2, fund Kids 3`. A page holds 20 rows: call again with
+`meta.next_cursor` as `cursor` until `next_cursor` is null, so no row is left out.
 
 A destination for a `spend` row is a category **and** its plan: the budget it draws on
 (`schedule_id`), the bill it pays (`occurrence_id`), or `unplanned: true`. `approve_import` skips a
-spend row that names none of the three. Precedents agree only when they agree on both.
+spend row that names none of the three. Precedents agree only when they agree on both; the plan
+each went to is in `precedent_summary` (`schedule_id`, null for unplanned spend).
 
 Decide each row in this order; the first rule that applies wins:
 
@@ -150,9 +154,11 @@ has not accepted.
 
 ## 6. Close and open
 
-`open_period` with the next period's dates (the household's period length is in the notes; the
-new period starts the day the current one ends), the balances and confirmed `pending_transaction_ids` from step 5, `end_schedule_ids`
-for schedules the member said to end, and a `request_id`. Run `check_period` once more when
+`open_period` with the next period's dates (the boundaries are in the notes; the new period starts
+the day the current one ends), the balances and confirmed `pending_transaction_ids` from step 5, `end_schedule_ids`
+for schedules the member said to end, and a `request_id`. It refuses (`conflict`, naming each batch
+and its count) while rows staged in the closing period wait for review: review them, or pass
+`discard_unreviewed` when the member says to drop them. Run `check_period` once more when
 anything changed since step 5: the real write answers only the new period, so the figures you
 report come from that last check.
 
