@@ -63,7 +63,7 @@ Decide each row in this order; the first rule that applies wins:
 
 | The row is… | Do |
 |---|---|
-| a move the notes say is not a transaction here — from an untracked account, a card payment from chequing, the deposit side of a member-to-member transfer, a row the member enters by hand | `map_import_rows` with `status: ignored` and a comment naming the reason |
+| a move the notes say is not a transaction here — to or from an account the member chose to leave untracked, a card payment from chequing, the deposit side of a member-to-member transfer, a row the member enters by hand | `map_import_rows` with `status: ignored` and a comment naming the reason |
 | a payment of a bill the app did not match (amount differs from the plan, or paid late) — check `list_bills` with `status: unpaid` | map it with the bill's `occurrence_id`; the plan adjusts |
 | a row whose precedents agree (two or more, one destination and plan, this member) | map it to that destination and plan; list it under "recorded from precedent" in your summary so the member can glance |
 | a counterparty or merchant the notes settle (e.g. "e-transfers to J. Smith are rent") | map it as the notes say |
@@ -121,6 +121,10 @@ from the bank, not from memory, and a wrong one shows as unaccounted at the next
   before the close. Show them to the member and pass the ones they confirm as
   `pending_transaction_ids`, on this check and on `open_period`. The card's late row in the next
   period is then set aside as already recorded.
+- **A tracked account with no export** (a savings account whose bank gives no CSV): its moves are
+  recorded from the other account's rows, mapped `kind: transfer` with `to_account` naming it, and its
+  balance is entered from the bank's account page. Interest it earned is on no file, so it shows
+  as a small unaccounted figure for that member; say so when you report it.
 - **Running balances in an export** are not a closing balance: rows sharing a date can be printed
   in any order, so the last row's balance may be from before another row that day. Take the
   closing balance from the account page.
