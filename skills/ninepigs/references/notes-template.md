@@ -21,7 +21,8 @@ replaced, not appended to.
 ## Counterparties
 - e-transfer to J. SMITH — rent, Admin, Housing (bill "Rent").
 - e-transfer from K. LEE — Alice's share of the car, income.
-- e-transfer to M. BROWN — a loan (loan out); the repayments come back as loan in.
+- e-transfer to M. BROWN — a loan (loan out), debt "M. Brown"; the repayments come back as loan in
+  against it.
 
 ## Merchants
 - DOLLAR STORE — Home, unless the member says it was for the kids (fund Kids).

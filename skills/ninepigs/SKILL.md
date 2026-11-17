@@ -5,7 +5,7 @@ license: MIT
 compatibility: Needs the Ninepigs MCP server connected (https://api.ninepigs.com/mcp), or Python 3 with network access for scripts/ninepigs.py.
 metadata:
   author: ninepigs
-  version: "0.1.17"
+  version: "0.1.18"
 ---
 
 # Ninepigs
@@ -124,6 +124,15 @@ included — move them until the period closes; say so. Check `drift` first: whe
 the drift; the owner can put it into a fund with `absorb_drift` (preview, name the amount and
 the fund, then write it). A member's transfer, once made, is a `record_transaction` of kind
 `transfer` to the other member.
+
+Money owed between the household and someone outside it is a debt: `list_debts`, each with a
+signed `balance` (positive: they owe the household). A loan (`loan_in`, `loan_out`) to or from
+someone tracked as one names it with `debt` when recorded or mapped; a debt starts with
+`create_debt`, only on the member's yes. A loan need not be a debt: one with no such person
+behind it stays unlinked, and an existing loan is never linked without the member saying which. A debt
+at zero stays open until the member closes it; offer to close it when a loan settles it. A closed
+debt reopens when one of its loans changes. One charge can carry a loan part (`parts`, with its
+`debt`) — dinner paid for two, half lent.
 
 Under `pooled` there are no figures. Offer custody instead of working it out by hand: the owner
 turns it on in Settings → Household (where the money sits, and the default keeper), and each
