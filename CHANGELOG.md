@@ -3,6 +3,14 @@
 The skill and the `/api/v1` and MCP surface it runs on, by skill version. The API itself changes in place
 with no compatibility window; a version here names the app build the skill was tested against.
 
+## 0.1.16 — 2026-11-17
+
+- Onboarding asks which other bank accounts receive regular moves or hold fund money and proposes
+  adding each as an account, created only on the member's yes; only an account with no moves, or
+  one the member declines, stays untracked.
+- A tracked account with no export (a savings account) is recorded from the other account's
+  transfer rows; its interest shows as a small unaccounted figure at the close.
+
 ## 0.1.15 — 2026-11-17
 
 - `get_context` → `setup` lists `currency` until the owner has chosen it; the agent asks even when

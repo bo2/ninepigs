@@ -11,7 +11,7 @@ replaced, not appended to.
 ## Accounts
 - Admin's **Chequing** = Big Bank chequing ****1234 plus the linked savings ****5678 (its moves to chequing are internal; fold both balances in at close).
 - Admin's **Credit card** = Big Bank Mastercard. Payments to it from chequing are not transactions.
-- Alice's **Chequing** = Other Bank chequing. Her savings ****9012 is untracked: ignore its moves.
+- Alice's **Chequing** = Other Bank chequing. Her **Savings** = Other Bank savings ****9012; no export, so its moves are recorded from chequing and its interest shows as unaccounted at close.
 - Cash accounts close at 0 unless the member says otherwise.
 
 ## Members
@@ -33,5 +33,5 @@ replaced, not appended to.
 - Exports: both members download CSVs from their bank's site; Alice's card export carries an extra trailing column the app accepts.
 
 ## Open
-- Whether Alice's savings should become a tracked account (asked 2026-10-01).
+- Whether Admin's old savings ****3456 (no moves since spring) can be dropped from the notes (asked 2026-10-01).
 ```
