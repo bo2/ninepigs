@@ -3,6 +3,16 @@
 The skill and the `/api/v1` and MCP surface it runs on, by skill version. The API itself changes in place
 with no compatibility window; a version here names the app build the skill was tested against.
 
+## 0.1.15 — 2026-11-17
+
+- `get_context` → `setup` lists `currency` until the owner has chosen it; the agent asks even when
+  the default looks right.
+- `create_fund` requires a cap (an amount or a percent); there is no 100% default.
+- Each member's cash account is named after them ("Petr cash"); an ambiguous account name answers
+  with each candidate's member.
+- Mapping an imported row to a kind against its bank line's direction is refused.
+- The default categories have Housing in place of Rent.
+
 ## 0.1.14 — 2026-11-16
 
 - The close says its balances open the next period and are not corrected afterwards; a wrong one
