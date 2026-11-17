@@ -3,6 +3,19 @@
 The skill and the `/api/v1` and MCP surface it runs on, by skill version. The API itself changes in place
 with no compatibility window; a version here names the app build the skill was tested against.
 
+## 0.1.17 — 2026-11-17
+
+- The agent sets the period boundaries from the household's main income: each period ends on a
+  posted payday (calendar months with no regular income), and onboarding confirms the choice
+  instead of asking for a length.
+- A household whose exports reach back past today's period starts with its last two or three
+  complete periods built from them, one month at a time: stage, review and approve, `check_period`,
+  `open_period`. Schedules and funds come after the first month.
+- Staging into a period that has ended keeps only its rows (`dropped.after_period` counts the rest);
+  `open_period` refuses while the closing period has unreviewed rows unless `discard_unreviewed`.
+- `review_import` pages 20 rows at a time with up to three compact precedents per row; the agent
+  follows `next_cursor` until it is null.
+
 ## 0.1.16 — 2026-11-17
 
 - Onboarding asks which other bank accounts receive regular moves or hold fund money and proposes

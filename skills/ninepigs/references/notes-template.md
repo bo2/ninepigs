@@ -29,7 +29,7 @@ replaced, not appended to.
 - STREAMCO — bill "Streaming", Admin.
 
 ## Period
-- Two weeks, 1st and 16th. Admin closes it; Alice sends her balances the evening before.
+- Ends on Admin's payday as the bank posts it: the 15th, or the Friday before when that is a weekend. Admin closes it; Alice sends her balances the evening before.
 - Exports: both members download CSVs from their bank's site; Alice's card export carries an extra trailing column the app accepts.
 
 ## Open

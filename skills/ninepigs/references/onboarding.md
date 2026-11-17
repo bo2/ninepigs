@@ -48,10 +48,23 @@ after each step. Confirm each write with the member before making it; the househ
 4. **Categories and funds.** The default categories are a fine start; `create_category`,
    `create_fund` for what the household names. A fund needs its cap: a fixed amount per month (or
    other window) or a percent of what is left at its turn. Ask for it; funds fill in order, so a
-   high percent early in the order leaves little for the funds after it.
-5. **The first period.** Ask its first day and length (two weeks, a month) and each account's
-   balance on that first day — for a card, what was owed, positive — then `check_period` with
-   every balance, confirm its figures, and `open_period`.
+   high percent early in the order leaves little for the funds after it. With past periods to build,
+   funds wait until the first one is closed ([§ Building the history](#building-the-history)).
+5. **The periods.** You set the period boundaries from the household's income; tell the owner
+   what you chose and why, and change it when they override it. Don't ask for a length.
+   - **Each period ends on a payday** of the main regular income — the largest; with two members
+     paid on different cycles, the larger income's — on the day the bank posted it, and the next
+     period starts that same day. The day two periods share belongs to the closing period, so each
+     period's pay lands on its last day: the money the next period runs on. Lengths follow the
+     posted days, so a monthly salary gives periods of 28 to 35 days as weekends move it.
+   - **No regular income** in the statements: calendar months.
+   - **The current period** ends on the next expected payday. When the pay posts on another day,
+     open the next period on the day it posted: `start_date` moves the current period's end with it.
+   - With statements that cover past months, build those periods first: [§ Building the
+     history](#building-the-history). Otherwise ask each account's balance on the first day — for
+     a card, what was owed, positive — then `check_period` with every balance, confirm its figures,
+     and `open_period`.
+
    An account added after this needs its `opening_balance`: its balance on the open period's start
    date. An opening balance found wrong later is fixed with `correct_opening_balance` while the
    period it was first given in is still open.
@@ -70,7 +83,8 @@ names from `get_context` filled in:
    (rent, a loan, a shared bill, a gift).
 4. **Funds.** What each fund is for, and whether a particular store or site is always one
    member's or one fund's spending.
-5. **The period.** Its length (two weeks, a month), and what cash accounts close at.
+5. **The period.** Confirm the boundaries you chose (step 5 of stage 2), and what cash accounts
+   close at.
 6. **Exports.** Where the bank CSVs come from each period, or whether a member hands them over.
 
 Write the answers into the notes in the template's shape ([notes-template.md](notes-template.md))
@@ -80,3 +94,37 @@ Then run the first import ([period-routine.md](period-routine.md)). With no prec
 row the app cannot settle is a question; group them per member as multiple choice from the
 categories and funds, and record what they answer. That period's answers are the next period's
 precedents — the second import is mostly confirmations.
+
+## Building the history
+
+When the members' exports reach back past the current period, the household starts with its past
+periods built from them instead of an empty one opened today.
+
+1. **Choose the periods.** The last two or three complete periods the statements cover, with the
+   boundaries from stage 2 step 5; say how many and their dates. The first period starts the day
+   after a payday: started on one, it would hold two pays, the one on its first day and the one on
+   its last.
+2. **The first day's balances.** Ask each account's balance today, or read it from the bank's
+   account page, and work it back through the export: today's balance minus every row dated on or
+   after the first period's first day. Show the owner the figures and the rows they came from
+   before opening.
+3. **Each past period, oldest first:**
+   1. `stage_statement` with every member's whole export. Staging a period that has ended keeps
+      only its own rows: `dropped.after_period` counts the later ones, and the same files are staged
+      again for the next period. Rows the previous period recorded stage as duplicates.
+   2. Review and approve it as in [period-routine.md](period-routine.md) steps 3–4: every row
+      decided and approved, `complete_import` done.
+   3. `check_period` with each account's balance on the period's last day, worked back from today's
+      balance the same way: today's balance minus every row dated after that day. Each member's
+      unaccounted figure near zero means the month is complete; otherwise find the row, as in step 5
+      of the routine.
+   4. `open_period` for the next period, with those balances. Never open the next period before the
+      month is approved: `open_period` refuses (`conflict`, naming each batch) while the closing
+      period has unreviewed rows. Pass `discard_unreviewed` only when the member says those rows are
+      to be dropped.
+4. **Plans after the first month.** Once the first period is closed, create the schedules
+   (bills, budgets, each member's pay) and the funds the first month shows, as stage 2 step 4 and
+   SKILL.md § Keeping plans current describe; they plan from the open period on. Earlier months
+   keep the plan they closed with, which is none for the first.
+5. **The current period** is the last one opened, ending on the next expected payday. Its rows are
+   imported as in the period routine.
