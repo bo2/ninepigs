@@ -24,7 +24,7 @@ key and body within 24 hours replays the first answer instead of writing again.
 
 | Tool | Call |
 |---|---|
-| `get_context` | `GET /me` — `user.id` is your `user_id`; `members`, `categories`, `funds` by id and name; `current_period`; `token.scope` |
+| `get_context` | `GET /me` — `user.id` is your `user_id`; `members`, `categories`, `funds`, open `debts` by id and name; `current_period`; `token.scope` |
 | `read_notes`, `update_notes` | `GET /notes`, `PUT /notes` `{"content": "…"}` |
 | `list_accounts` | `GET /accounts` |
 | `update_household` | `PATCH /household` `{"name"?, "currency"?}` — owner only; the currency only while no money is recorded |
@@ -57,6 +57,7 @@ key and body within 24 hours replays the first answer instead of writing again.
 | `absorb_drift` | `--dry-run`, then `--key`, `POST /funds/{id}/absorb-drift` `{"comment"?}` — owner only |
 | custody (no tool) | `GET` / `PATCH /household` `{"custody": "pooled"\|"by_keeper", "default_keeper_id"}` — owner only |
 | `create_category` | `POST /categories` |
+| `list_debts`, `create_debt` | `GET /debts` (`closed=true` for the closed), `POST /debts` `{"name", "opening_amount"?}`, `PATCH /debts/{id}`; a loan names one with `debt_id`, and `GET /transactions?debt_id=…` (or `none`) lists its loans |
 | `delete_category` | `--dry-run DELETE /categories/{id}` first: a category its live schedules still plan bills in needs each one ended (`end_schedule_ids`) or moved (`move_schedule_ids` with `move_schedules_to`); ask the person per schedule, then send them. One anything is filed under is archived (its transactions keep it), an empty one is deleted for good; `result` says which. Transactions never move. `GET /categories/{id}/references` lists the live schedules |
 | `restore_category` | `GET /categories?archived=true`, then `POST /categories/{id}/restore` — back in the pickers, last in the order; ended or moved schedules stay as they are |
 | what changed | `GET /activity?since=…&api_token_id=…` |

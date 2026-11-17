@@ -3,6 +3,14 @@
 The skill and the `/api/v1` and MCP surface it runs on, by skill version. The API itself changes in place
 with no compatibility window; a version here names the app build the skill was tested against.
 
+## 0.1.18 — 2026-11-18
+
+- Debts: `list_debts` and `create_debt`; `record_transaction`, `update_transaction`,
+  `map_import_rows` and `find_transactions` take `debt` for a loan. A debt's balance is its
+  opening amount less its loans. A loan need not be a debt. A settled debt stays open
+  until a member closes it (`closed`); a change to a closed debt's loans reopens it.
+- A split's parts may be `loan_out` / `loan_in`, each with its own `debt`.
+
 ## 0.1.17 — 2026-11-17
 
 - The agent sets the period boundaries from the household's main income: each period ends on a
