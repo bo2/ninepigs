@@ -113,7 +113,8 @@ check. A batch you cannot finish stays open in the app's review screen for the m
 on the period's last day (a credit account's balance is what is owed; cash accounts as the notes
 say, usually 0). Balances come from the member or from the bank's account page. They open the next
 period and are not corrected after the close (`correct_opening_balance` refuses them): read each
-from the bank, not from memory, and a wrong one shows as unaccounted at the next close.
+from the bank, not from memory. A wrong one shows as unaccounted at the next close, unless the
+close is undone first (step 6).
 
 - **Pending card charges.** When pending rows were recorded (`include_pending`), the card balance
   you enter is the bank's current balance **plus its pending total**: the bank leaves pending out,
@@ -125,6 +126,14 @@ from the bank, not from memory, and a wrong one shows as unaccounted at the next
   before the close. Show them to the member and pass the ones they confirm as
   `pending_transaction_ids`, on this check and on `open_period`. The card's late row in the next
   period is then set aside as already recorded.
+- **A payment that never arrived.** `still_in_transit` lists the payments the previous close took
+  as pending that no row has matched since. Ask the member about each: still on its way → pass it
+  in `pending_transaction_ids` again; came back → record the return (the bank's row for the money
+  coming back, mapped `kind: transfer` from that account) and leave it out.
+- **No statement for the account.** `unchecked_transfers` lists transfers of the period's last
+  days to an account with no rows this period, so no statement could show them arriving (often a
+  savings account with no export). Ask the member whether each has arrived; pass the ones still on
+  their way as pending.
 - **A tracked account with no export** (a savings account whose bank gives no CSV): its moves are
   recorded from the other account's rows, mapped `kind: transfer` with `to_account` naming it, and its
   balance is entered from the bank's account page. Interest it earned is on no file, so it shows
@@ -146,7 +155,8 @@ Near zero for everyone → the period is ready. Otherwise, in this order:
    `update_transaction` fixes it, `delete_transaction` removes a duplicate.
 4. A gap equal to a card payment from the period's last days that `in_transit` does not list:
    it was recorded without `to_account`, so the close cannot place it. Tell the member which
-   payment it is; the gap closes as unaccounted.
+   payment it is; the gap closes as unaccounted. A gap equal to a `still_in_transit` payment is
+   that payment: ask the member whether it is still on its way or came back.
 5. A cash expense nobody recorded: the member's call.
 
 Report the figure per member and what explains it; do not open the period on a figure the member
@@ -161,6 +171,12 @@ and its count) while rows staged in the closing period wait for review: review t
 `discard_unreviewed` when the member says to drop them. Run `check_period` once more when
 anything changed since step 5: the real write answers only the new period, so the figures you
 report come from that last check.
+
+**A close made on a wrong figure** — a balance misread, a pending payment missed — is taken back
+with `undo_close` while nothing is recorded in the new period: the closed period is open again, with
+its corrections and fund distributions removed, and you close it again from step 5. Confirm with
+the member first, naming what goes back. Once anything is recorded in the new period it refuses,
+and the difference lands in the next close as unaccounted.
 
 Report: the closed period's net, the distributions into funds, and the new period's dates. Under
 custody, add the settlement the close leaves — `check_period`'s `settlement`: its `transfers`
