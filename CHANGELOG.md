@@ -3,6 +3,16 @@
 The skill and the `/api/v1` and MCP surface it runs on, by skill version. The API itself changes in place
 with no compatibility window; a version here names the app build the skill was tested against.
 
+## 0.1.19 — 2026-11-18
+
+- `undo_close` takes back the latest close while nothing is recorded in the period it opened;
+  the agent confirms with the member first. `correct_opening_balance`'s refusal of a carried
+  balance names it while it would succeed.
+- `check_period` lists `still_in_transit` — payments the previous close took as pending that no
+  row has matched since — and `unchecked_transfers` — transfers to an account with no statement
+  rows in the period. The agent asks the member whether each is still on its way (pass it as
+  pending) or came back (record the return).
+
 ## 0.1.18 — 2026-11-18
 
 - Debts: `list_debts` and `create_debt`; `record_transaction`, `update_transaction`,
